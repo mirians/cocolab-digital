@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nash, Pushed</title>
+<meta name="description" content="A case study by Mirian Gil: how AI pushes the Nash brand into new territory, starting with social media.">
+<meta property="og:title" content="Nash, Pushed. A case study by Mirian Gil">
+<meta property="og:description" content="More expressive motion, tighter systems, higher craft, broader application, faster velocity and new creative territory, with a full social media system.">
+<meta property="og:image" content="img/grocery.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Built on the published Nash toolkit v1.0 tokens (nash.ai/brand).
+     Layout idea: alternate "the world as it is" (light, Blue 50) with "Nash acts" (dark, Blue 600).
+     Chartreuse appears only inside the work and in the one Jolt moment, never on text, stats or links. */
+  --b50:#F8FAFC; --b100:#E5EDF6; --b200:#B1C4DC; --b300:#5A7498; --b400:#314868; --b500:#0B1F3A; --b600:#01051E;
+  --flash:#C9FF00;   /* Nash Chartreuse 50, bright, on dark only */
+  --olive:#193000;   /* Nash Chartreuse 200, on light only */
+  --amber:#B4741F;   /* semantic: fix before use (not a brand color) */
+  --sans:"Host Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --serif:"Instrument Serif", Georgia, serif;
+  --ease:cubic-bezier(0.22,1,0.36,1); /* easeOutQuint, as specified for the Jolt */
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--b50);color:var(--b500);font-family:var(--sans);font-size:16px;line-height:26px;font-weight:400}
+img,video{max-width:100%;height:auto;display:block}
+a{color:inherit;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* Nash type scale */
+.display{font-size:52px;line-height:56px;letter-spacing:-.03em;font-weight:500}
+h1,.h1{font-size:40px;line-height:44px;letter-spacing:-.025em;font-weight:500;margin:0;text-wrap:balance}
+h2,.h2{font-size:28px;line-height:32px;letter-spacing:-.02em;font-weight:500;margin:0;text-wrap:balance}
+h3,.h3{font-size:20px;line-height:26px;letter-spacing:-.01em;font-weight:500;margin:0}
+.cap{font-family:var(--mono);font-size:12px;line-height:18px;letter-spacing:.14em;font-weight:500;text-transform:uppercase}
+.mono{font-family:var(--mono)}
+.muted{color:var(--b300)}
+p{margin:0}
+.prose{max-width:62ch;display:grid;gap:14px}
+
+/* Chapters */
+.chapter{padding:88px 0}
+.dark{background:var(--b600);color:var(--b100)}
+.dark .muted{color:var(--b200)}
+.mid{background:var(--b100)}
+.chead{display:grid;grid-template-columns:120px 1fr;gap:24px;margin-bottom:40px;align-items:start}
+.num{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--b300);padding-top:8px}
+.dark .num{color:var(--b200)}
+
+/* Top bar */
+.top{position:absolute;inset:0 0 auto 0;z-index:3}
+.top .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;padding-bottom:20px;color:var(--b200)}
+
+/* Hero */
+.hero{position:relative;background:var(--b600);color:var(--b50);overflow:hidden;padding:120px 0 64px}
+.aurora{position:absolute;inset:-20% -10% auto -10%;height:120%;pointer-events:none;
+  background:radial-gradient(40% 50% at 20% 30%,rgba(90,116,152,.55),transparent 70%),radial-gradient(35% 45% at 80% 20%,rgba(49,72,104,.7),transparent 70%),radial-gradient(30% 40% at 60% 80%,rgba(177,196,220,.18),transparent 70%);filter:blur(30px)}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.hero-title{font-family:var(--serif);font-weight:400;font-size:clamp(72px,11vw,148px);line-height:.9;letter-spacing:-.02em;margin:0}
+.hero-title span{display:inline-block}
+.hero p.lead{font-size:20px;line-height:30px;color:var(--b100);max-width:34ch;margin-top:24px}
+.hero .meta{margin-top:28px;display:grid;gap:4px;color:var(--b200)}
+.screen{position:relative;border:1px solid var(--b400);background:#000}
+.screen video,.screen img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.screen .stamp{position:absolute;right:12px;bottom:10px;color:var(--b100);background:rgba(1,5,30,.6);padding:4px 8px}
+
+/* Jolt: 550ms, 3px channel offset, chartreuse halo, easeOutQuint */
+@keyframes jolt{
+  0%{text-shadow:-3px 0 rgba(255,0,90,.85),3px 0 rgba(0,180,255,.85),0 0 24px rgba(201,255,0,.65);transform:translateX(1px)}
+  40%{text-shadow:2px 0 rgba(255,0,90,.5),-2px 0 rgba(0,180,255,.5),0 0 14px rgba(201,255,0,.35);transform:translateX(-1px)}
+  100%{text-shadow:0 0 transparent,0 0 transparent,0 0 transparent;transform:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .jolt{animation:jolt 550ms var(--ease) 1}
+}
+
+/* Brief */
+.brief{display:grid;grid-template-columns:1.1fr .9fr;gap:48px}
+blockquote{margin:0;font-family:var(--serif);font-size:34px;line-height:40px;letter-spacing:-.01em;text-wrap:balance}
+.pushes{list-style:none;margin:0;padding:0;border-top:1px solid var(--b200)}
+.pushes li{border-bottom:1px solid var(--b200)}
+.pushes a{display:grid;grid-template-columns:44px 1fr auto;gap:12px;padding:14px 0;text-decoration:none;align-items:baseline}
+.pushes a:hover h3{text-decoration:underline}
+
+/* Start: mantras and gap */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.card{border:1px solid var(--b200);background:var(--b50);padding:18px;display:grid;gap:8px;align-content:start}
+.mid .card{background:var(--b50)}
+.dark .card{background:var(--b500);border-color:var(--b400)}
+.gap{margin-top:32px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;border:1px solid var(--b500);padding:24px;background:var(--b50)}
+.gap .big{font-family:var(--mono);font-size:64px;line-height:1;letter-spacing:-.04em}
+
+/* Pushes */
+.push{display:grid;grid-template-columns:200px 1fr 1fr;gap:28px;padding:36px 0;border-top:1px solid var(--b200)}
+.push:last-child{border-bottom:1px solid var(--b200)}
+.push .col{display:grid;gap:10px;align-content:start}
+.push .k{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--b300)}
+.push ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.proof{font-size:14px;line-height:22px;border-left:2px solid var(--b500);padding-left:12px}
+
+/* Social system */
+.channels{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pillar{border-top:2px solid var(--b200);padding-top:14px;display:grid;gap:8px;align-content:start}
+.pillar .ch{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--b200)}
+.tablewrap{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:15px;line-height:22px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--b400)}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--b200);font-weight:500}
+td.m{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.light-table th{color:var(--b300)} .light-table th,.light-table td{border-color:var(--b200)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.rules{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.rules li{display:grid;grid-template-columns:28px 1fr;gap:8px}
+.rules li b{font-family:var(--mono);font-weight:500;color:var(--b200)}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sw{width:112px;border:1px solid var(--b400);font-family:var(--mono);font-size:11px;line-height:16px}
+.sw i{display:block;height:44px;position:relative}
+.sw i::after{content:"";position:absolute;left:12px;top:12px;width:20px;height:20px}
+.sw.a i{background:var(--b500)} .sw.a i::after{background:var(--flash)}
+.sw.b i{background:var(--b100)} .sw.b i::after{background:var(--olive)}
+.sw span{display:block;padding:6px 8px;color:var(--b100)}
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--b400);border:1px solid var(--b400)}
+.day{background:var(--b500);padding:14px;display:grid;gap:6px;align-content:start;min-height:120px}
+.day .d{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--b200)}
+
+/* Feed mockups */
+.feed{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:start}
+.post{background:#fff;color:#1b1f24;border:1px solid var(--b200);font-size:14px;line-height:20px}
+.post .ph{display:flex;gap:10px;align-items:center;padding:12px 14px}
+.avatar{width:40px;height:40px;background:var(--b600);display:grid;place-items:center;flex:none}
+.avatar svg{width:22px;height:22px}
+.post .who b{display:block;font-weight:600}
+.post .who span{color:#5f6b7a;font-size:12px}
+.post .txt{padding:0 14px 12px;white-space:pre-line}
+.post .bar{display:flex;justify-content:space-between;padding:10px 14px;border-top:1px solid #e6e9ee;color:#5f6b7a;font-size:12px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid #c5ced9;padding:2px 6px;margin-left:auto;color:#5f6b7a}
+.find{position:relative;cursor:crosshair}
+.find img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.ring{position:absolute;width:64px;height:64px;border-radius:50%;border:2px solid var(--flash);box-shadow:0 0 0 3px rgba(1,5,30,.55),0 0 24px rgba(201,255,0,.7);transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none}
+.ring.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform 550ms var(--ease),opacity 200ms linear}
+.findmsg{position:absolute;left:10px;bottom:10px;background:rgba(1,5,30,.75);color:var(--b50);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:4px 8px}
+.carousel{display:flex;gap:10px;overflow-x:auto;padding:12px 14px;scroll-snap-type:x mandatory}
+.slide{flex:0 0 72%;aspect-ratio:4/5;scroll-snap-align:start;background:var(--b600);color:var(--b100);position:relative;display:grid;align-content:end;padding:16px;overflow:hidden}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide .s-txt{position:relative;font-size:19px;line-height:24px;letter-spacing:-.01em;font-weight:500;text-wrap:balance}
+.slide .s-txt.serif{font-family:var(--serif);font-weight:400;font-size:26px;line-height:28px}
+.slide .s-n{position:absolute;top:12px;left:16px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--b200)}
+.slide .s-stamp{position:absolute;right:12px;bottom:10px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--b200)}
+.slide.shade::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(1,5,30,.85));z-index:1}
+.slide.shade .s-txt,.slide.shade .s-n,.slide.shade .s-stamp{z-index:2}
+.phone{background:#000;border-radius:28px;padding:10px;border:1px solid var(--b400)}
+.story{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:20px}
+.story img{width:100%;height:100%;object-fit:cover}
+.story .bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px}
+.story .bars i{flex:1;height:2px;background:rgba(255,255,255,.4)} .story .bars i:first-child{background:#fff}
+.story .ov{position:absolute;left:14px;right:14px;bottom:60px;color:#fff;font-size:20px;line-height:24px;font-weight:500;letter-spacing:-.01em;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+.story .stamp{position:absolute;right:14px;bottom:18px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#fff;opacity:.85}
+.story .safe{position:absolute;left:0;right:0;border-top:1px dashed rgba(201,255,0,0);}
+.feedcap{margin-top:10px;font-size:13px;line-height:20px;color:var(--b300)}
+.x{background:#000;color:#e7e9ea;border-radius:12px;padding:14px;font-size:15px;line-height:20px}
+.x .xt{margin:6px 0 10px}
+.x img{border-radius:12px;width:100%;aspect-ratio:16/9;object-fit:cover}
+
+/* Gallery of reviewed outputs */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+figure{margin:0;background:var(--b50);border:1px solid var(--b200)}
+figure img{width:100%;aspect-ratio:16/9;object-fit:cover}
+figure.tall img{aspect-ratio:9/16}
+figure.sq img{aspect-ratio:1/1}
+figcaption{padding:12px 14px 14px;display:grid;gap:6px;font-size:14px;line-height:21px}
+.ct{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--b500);white-space:nowrap}
+.chip.fix{border-color:var(--amber);color:var(--amber)}
+
+/* Generator */
+.gen{border:1px solid var(--b500);background:var(--b50);display:grid;grid-template-columns:280px 1fr}
+.controls{padding:20px;border-right:1px solid var(--b200);display:grid;gap:14px;align-content:start}
+.controls label{display:grid;gap:6px}
+select{font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--b500);background:var(--b50);color:var(--b500);border-radius:0;width:100%}
+.out{padding:20px;display:grid;gap:16px;align-content:start;min-width:0}
+pre.prompt{font-family:var(--mono);font-size:13px;line-height:21px;background:var(--b100);border:1px solid var(--b200);padding:16px;margin:0;white-space:pre-wrap;word-break:break-word}
+pre.prompt .slot{border-bottom:1px solid var(--b500)}
+pre.prompt .slot::before{content:"[NASH ELEMENT] ";font-size:10px;letter-spacing:.1em;color:var(--b300)}
+button{font:inherit;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:10px 14px;border:1px solid var(--b500);background:var(--b500);color:var(--b50);cursor:pointer;border-radius:0}
+button:hover{background:var(--b50);color:var(--b500)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.status{font-family:var(--mono);font-size:12px;color:var(--b300)}
+.capline{font-size:15px;line-height:23px;background:var(--b100);padding:12px 14px;border-left:2px solid var(--b500);white-space:pre-line}
+.checks{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;line-height:21px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:6px}
+.checks li::before{content:"";width:12px;height:12px;border:1px solid var(--b500);margin-top:4px}
+
+/* Pipeline and plan */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.step{border-top:2px solid var(--b500);padding-top:12px;display:grid;gap:8px;align-content:start}
+.step .who{font-size:13px;line-height:20px}
+.step .who b{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:block;color:var(--b300)}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.plan .card ul{margin:0;padding-left:18px;display:grid;gap:6px}
+
+/* About and footer */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.foot{padding:32px 0 56px;font-size:13px;line-height:20px;color:var(--b300);display:grid;gap:8px;border-top:1px solid var(--b200)}
+
+@media (max-width:980px){
+  .hero .wrap,.brief,.two,.about{grid-template-columns:1fr}
+  .push{grid-template-columns:1fr}
+  .grid5,.pillars,.steps,.week{grid-template-columns:1fr 1fr}
+  .grid3,.channels,.plan,.gallery{grid-template-columns:1fr 1fr}
+  .gen{grid-template-columns:1fr} .controls{border-right:0;border-bottom:1px solid var(--b200)}
+  .feed>*{grid-column:span 12 !important}
+}
+@media (max-width:600px){
+  .grid3,.grid5,.pillars,.steps,.week,.channels,.plan,.gallery{grid-template-columns:1fr}
+  .chead{grid-template-columns:1fr;gap:8px}
+  h1,.h1{font-size:32px;line-height:36px}
+  blockquote{font-size:26px;line-height:32px}
+  .gap{grid-template-columns:1fr}
+  .chapter{padding:64px 0}
+}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <span class="cap">Cocolab · Mirian Gil</span>
+  <span class="cap">Case study · November 2026 · Concept, not affiliated with Nash</span>
+</div></header>
+
+<!-- 00 HERO -->
+<section class="hero" aria-labelledby="t">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    <div>
+      <p class="cap" style="color:var(--b200)">AI Brand Design Lead · How I would do the job</p>
+      <h1 id="t" class="hero-title"><span class="jolt">Push it.</span></h1>
+      <p class="lead">Nash has a brand that already behaves like the platform. This is how I would push it into territory that only opens up with AI, starting with the one surface the toolkit doesn't cover yet: social.</p>
+      <div class="meta">
+        <span class="cap">Six images, one motion piece, one prompt system</span>
+        <span class="cap">Made in one afternoon with Claude and Magnific</span>
+      </div>
+    </div>
+    <div>
+      <div class="screen">
+        <video id="hero-video" autoplay muted loop playsinline poster="img/grocery.jpg" aria-label="Living painting: a Dutch Golden Age market scene where everything stays still except one chartreuse delivery drone, which glides in and sets down a grocery bag">
+          <source src="video/living-archive.mp4" type="video/mp4">
+          <source src="video/living-archive.mov" type="video/quicktime">
+        </video>
+        <span class="stamp cap">Living Archive · 6 s</span>
+      </div>
+      <p class="cap muted" style="margin-top:10px;color:var(--b200)">The painting stays still. Only Nash moves.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 01 THE BRIEF -->
+<section class="chapter" id="brief">
+  <div class="wrap">
+    <div class="chead"><span class="num">01 · The brief</span><h1>Not redesign it. Not maintain it. Push it.</h1></div>
+    <div class="brief">
+      <div class="prose">
+        <blockquote>Take that brand and push it into territory that wasn't possible before AI.</blockquote>
+        <p class="muted">From the AI Brand Design Lead posting. The brief names six directions. Each one gets the same three questions below: where Nash is today, what AI makes possible, and what I have already built to prove it.</p>
+      </div>
+      <ol class="pushes" aria-label="The six pushes">
+        <li><a href="#p-motion"><span class="mono muted">A</span><h3>More expressive motion</h3><span class="cap muted">Living Archive</span></a></li>
+        <li><a href="#p-systems"><span class="mono muted">B</span><h3>Tighter systems</h3><span class="cap muted">Prompts as components</span></a></li>
+        <li><a href="#p-craft"><span class="mono muted">C</span><h3>Higher craft</h3><span class="cap muted">Human final pass</span></a></li>
+        <li><a href="#p-application"><span class="mono muted">D</span><h3>Broader application</h3><span class="cap muted">One master, every surface</span></a></li>
+        <li><a href="#p-velocity"><span class="mono muted">E</span><h3>Faster velocity</h3><span class="cap muted">A weekly series</span></a></li>
+        <li><a href="#p-territory"><span class="mono muted">F</span><h3>New creative territory</h3><span class="cap muted">Only AI makes this</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 02 STARTING POINT -->
+<section class="chapter mid" id="start">
+  <div class="wrap">
+    <div class="chead"><span class="num">02 · Starting point</span><div class="prose"><h1>A toolkit with strong rules</h1><p>I read the Nash brand toolkit v1.0 end to end. Its five mantras are already the foundation for scaling with AI, because each one is a rule a person can judge and a machine can check.</p></div></div>
+    <div class="grid5">
+      <div class="card"><span class="cap muted">Mark</span><p>Constant in shape, dynamic in behaviour.</p></div>
+      <div class="card"><span class="cap muted">Color</span><p>Chartreuse appears only when Nash intervenes.</p></div>
+      <div class="card"><span class="cap muted">Imagery</span><p>Show the world as it is, then the Nash difference.</p></div>
+      <div class="card"><span class="cap muted">Motion</span><p>Motion is the visible trace of optimisation.</p></div>
+      <div class="card"><span class="cap muted">Materiality</span><p>Physical objects separate Nash from generic AI content.</p></div>
+    </div>
+    <div class="gap">
+      <span class="big" aria-hidden="true">0</span>
+      <div class="prose">
+        <h2>Eighteen chapters, no social chapter.</h2>
+        <p>The toolkit covers the mark, color, type, motion, photography, illustration, voice and components. Social appears only as icons in the email signature and a LinkedIn banner. Yet social is where the brand meets the most people every week, at the fastest pace and in the most formats. That is where I would start pushing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 THE SIX PUSHES -->
+<section class="chapter" id="pushes">
+  <div class="wrap">
+    <div class="chead"><span class="num">03 · The six pushes</span><h1>Where Nash is, where AI takes it, and the proof</h1></div>
+
+    <div class="push" id="p-motion">
+      <div class="col"><span class="k">A · Motion</span><h2>More expressive motion</h2></div>
+      <div class="col"><span class="k">Today</span><p>Three mark behaviours, the 550 ms Jolt, Aurora light. Motion lives mostly on the mark and the website.</p></div>
+      <div class="col"><span class="k">Pushed with AI</span>
+        <ul>
+          <li><b>Living paintings:</b> the classical illustrations move, but only the Nash element does. The world stays frozen; Nash optimises. The mantra, made literal.</li>
+          <li><b>The Jolt as a social signature:</b> every product post resolves with the same 550 ms state change.</li>
+          <li>Motion templates per format, so every clip lands the same way.</li>
+        </ul>
+        <p class="proof">Proof: the hero video. One painting, one prompt, one render of about six minutes. The aberration polish would still be done by hand.</p>
+      </div>
+    </div>
+
+    <div class="push" id="p-systems">
+      <div class="col"><span class="k">B · Systems</span><h2>Tighter systems</h2></div>
+      <div class="col"><span class="k">Today</span><p>Tokens, type scale, components and downloads. The illustration rule is written down, but every new image starts from zero.</p></div>
+      <div class="col"><span class="k">Pushed with AI</span>
+        <ul>
+          <li><b>Prompts become components:</b> versioned, named, owned, like a button in the component library.</li>
+          <li><b>A brand checker:</b> a Claude skill that reads every asset and caption against the toolkit (one chartreuse element, approved color pairs, no bragging about AI).</li>
+          <li>Every reviewed "fix first" becomes a new line in the template.</li>
+        </ul>
+        <p class="proof">Proof: the prompt generator in chapter 06, at version 2 after one review cycle.</p>
+      </div>
+    </div>
+
+    <div class="push" id="p-craft">
+      <div class="col"><span class="k">C · Craft</span><h2>Higher craft</h2></div>
+      <div class="col"><span class="k">Today</span><p>A high bar, and a clear wish that the final touch stays human.</p></div>
+      <div class="col"><span class="k">Pushed with AI</span>
+        <ul>
+          <li>AI produces options. People choose, retouch and finish.</li>
+          <li>Chartreuse is matched to #C9FF00 in retouch, never trusted from the model.</li>
+          <li>Aberration and the Jolt are keyframed by hand, because they are the signature.</li>
+        </ul>
+        <p class="proof">Proof: two of the six images on this page are marked "fix first", with the reason. Showing the review is the point.</p>
+      </div>
+    </div>
+
+    <div class="push" id="p-application">
+      <div class="col"><span class="k">D · Application</span><h2>Broader application</h2></div>
+      <div class="col"><span class="k">Today</span><p>Website, decks, booth and apparel, each designed on its own.</p></div>
+      <div class="col"><span class="k">Pushed with AI</span>
+        <ul>
+          <li>One master painting extends to every surface: square and portrait feed posts, carousels, 9:16 stories and shorts, X cards, 21:9 event screens, printed fabric.</li>
+          <li>Sales gets a painting per industry for decks and case studies.</li>
+        </ul>
+        <p class="proof">Proof: the feed mockups in chapter 05, all from the same system.</p>
+      </div>
+    </div>
+
+    <div class="push" id="p-velocity">
+      <div class="col"><span class="k">E · Velocity</span><h2>Faster velocity</h2></div>
+      <div class="col"><span class="k">Today</span><p>A new illustration is a craft project, so a weekly illustrated series is out of reach.</p></div>
+      <div class="col"><span class="k">Pushed with AI</span>
+        <ul>
+          <li>Generation takes under a minute per image. The human time goes into choosing, retouching and writing.</li>
+          <li>That makes a weekly series sustainable, and leaves the team's hours for the work only people can do.</li>
+        </ul>
+        <p class="proof">Proof: six paintings, one motion piece and this site, made in one afternoon.</p>
+      </div>
+    </div>
+
+    <div class="push" id="p-territory">
+      <div class="col"><span class="k">F · Territory</span><h2>New creative territory</h2></div>
+      <div class="col"><span class="k">Today</span><p>The illustrations are made for Nash's channels and seen by everyone the same way.</p></div>
+      <div class="col"><span class="k">Only possible with AI</span>
+        <ul>
+          <li><b>Your city, painted:</b> at Manifest or Shoptalk, visitors get their own city painted in a classical style with their own fleet as the chartreuse element, printed on fabric at the booth. AI speed plus Nash materiality.</li>
+          <li><b>Find the Nash:</b> a weekly social game. One painting, one hidden Nash element.</li>
+          <li><b>Customer canvases:</b> every customer gets the history of its own category, painted, for case studies and renewals.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SOCIAL SYSTEM -->
+<section class="chapter dark" id="social">
+  <div class="wrap">
+    <div class="chead"><span class="num">04 · The missing chapter</span><div class="prose"><h1>Nash on social</h1><p class="muted">A draft of chapter 19 for the toolkit: channels, pillars, formats, color, voice, rhythm and what to measure. Everything maps back to a chapter that already exists.</p></div></div>
+
+    <h2 style="margin-bottom:16px">Channels and their job</h2>
+    <div class="channels">
+      <div class="card"><span class="cap" style="color:var(--b200)">LinkedIn · Primary</span><p>Buyers, operators and partners. Thought leadership, customer proof, the Living Archive, product moments. Company page plus leaders' posts.</p></div>
+      <div class="card"><span class="cap" style="color:var(--b200)">X</span><p>Product news, launches and the Jolt. Short, sharp, often a single state change on screen.</p></div>
+      <div class="card"><span class="cap" style="color:var(--b200)">Instagram and YouTube Shorts</span><p>Culture: living paintings, events, apparel and the people behind the work. Where the brand's materiality earns attention.</p></div>
+    </div>
+
+    <h2 style="margin:56px 0 16px">Five content pillars</h2>
+    <div class="pillars">
+      <div class="pillar"><span class="ch">From ch. 12 Illustration</span><h3>The Living Archive</h3><p class="muted">Logistics has always existed. One classical scene a week, one chartreuse Nash element, often in motion.</p></div>
+      <div class="pillar"><span class="ch">From ch. 11 Photography</span><h3>World in Motion</h3><p class="muted">Customer locations in long exposure. The Nash moment stays sharp. Logo as a vibe stamp, bottom right, read last.</p></div>
+      <div class="pillar"><span class="ch">From ch. 08 and 10</span><h3>The Jolt</h3><p class="muted">Product moments: one state change per post, resolved with the 550 ms Jolt and the Agent UI components.</p></div>
+      <div class="pillar"><span class="ch">From ch. 14 Voice</span><h3>Operators</h3><p class="muted">A well informed friend talking to one person. The hard parts of logistics, explained simply, with real operators.</p></div>
+      <div class="pillar"><span class="ch">From ch. 13 Materiality</span><h3>Made Real</h3><p class="muted">Apparel, booths, objects. Proof that the brand exists off screen, the opposite of generic AI content.</p></div>
+    </div>
+
+    <h2 style="margin:56px 0 8px">Formats</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Format</th><th>Size</th><th>Best for</th><th>Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Feed image, square</td><td class="m">1080 × 1080</td><td>Living Archive, Find the Nash</td><td>One chartreuse element. Vibe stamp bottom right.</td></tr>
+          <tr><td>Feed image, portrait</td><td class="m">1080 × 1350</td><td>Operators, World in Motion</td><td>Text in the caption, not on the image, unless it is a quote card.</td></tr>
+          <tr><td>Carousel (PDF)</td><td class="m">1080 × 1350, 5 to 8 slides</td><td>Living Archive stories, explainers</td><td>Slide 1 is the world as it is; the last slide is the Nash difference.</td></tr>
+          <tr><td>Short video</td><td class="m">1080 × 1920 or 1080 × 1350</td><td>Living paintings, the Jolt, events</td><td>Silent first: the story reads without sound. Jolt once, never in a loop.</td></tr>
+          <tr><td>X card</td><td class="m">1600 × 900</td><td>Launches, product moments</td><td>One idea per card. Bright on dark.</td></tr>
+          <tr><td>Event screen</td><td class="m">21:9 at 3840 wide</td><td>Booths, keynotes</td><td>Aurora before the mark resolves; the mark moves, then holds.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two" style="margin-top:56px">
+      <div>
+        <h2 style="margin-bottom:12px">Color on social</h2>
+        <ul class="rules">
+          <li><b>01</b><span>Chartreuse lives only inside the work, on the Nash element. Never on captions, stats, buttons or highlights.</span></li>
+          <li><b>02</b><span>Bright on dark, dark on light: Chartreuse 50 on Blue 500 or 600, Chartreuse 200 on Blue 50 to 200.</span></li>
+          <li><b>03</b><span>Text on images in Host Grotesk; numbers and timestamps in Geist Mono.</span></li>
+        </ul>
+        <div class="swatches" aria-label="Approved pairs">
+          <div class="sw a"><i></i><span>Ch 50 on Blue 500</span></div>
+          <div class="sw b"><i></i><span>Ch 200 on Blue 100</span></div>
+        </div>
+      </div>
+      <div>
+        <h2 style="margin-bottom:12px">Captions in the Nash voice</h2>
+        <ul class="rules">
+          <li><b>01</b><span>Open with the world as it is. A hard, true thing operators recognise.</span></li>
+          <li><b>02</b><span>Then the Nash difference, in simple words, with the reason it matters.</span></li>
+          <li><b>03</b><span>One ask at most. No shouting, no bragging about AI, no jargon.</span></li>
+          <li><b>04</b><span>Allow some whimsy. The world is hard; the tone can still smile.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="margin:56px 0 16px">A week of Nash</h2>
+    <div class="week">
+      <div class="day"><span class="d">MON</span><h3>Living Archive</h3><p class="muted">Painting plus a short story caption. LinkedIn, Instagram.</p></div>
+      <div class="day"><span class="d">TUE</span><h3>Operators</h3><p class="muted">One lesson from a real operator. LinkedIn, leaders' posts.</p></div>
+      <div class="day"><span class="d">WED</span><h3>World in Motion</h3><p class="muted">Customer location photo. LinkedIn, Instagram.</p></div>
+      <div class="day"><span class="d">THU</span><h3>The Jolt</h3><p class="muted">One product state change. X, LinkedIn.</p></div>
+      <div class="day"><span class="d">FRI</span><h3>Find the Nash</h3><p class="muted">The weekly game. All channels. Monthly: one living painting.</p></div>
+    </div>
+
+    <h2 style="margin:56px 0 8px">What I would measure</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Question</th><th>Signal</th></tr></thead>
+        <tbody>
+          <tr><td>Is the brand memorable?</td><td>Saves and shares on Living Archive and Find the Nash posts</td></tr>
+          <tr><td>Are we reaching operators?</td><td>Comments and follows from logistics roles at target accounts</td></tr>
+          <tr><td>Does it feed the pipeline?</td><td>Profile visits, site sessions and demo requests from social</td></tr>
+          <tr><td>Is the system fast?</td><td>Hours from brief to approved asset, per format</td></tr>
+          <tr><td>Is the craft holding?</td><td>Share of outputs marked "fix first", and why, per month</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 05 FEED MOCKUPS -->
+<section class="chapter mid" id="feed">
+  <div class="wrap">
+    <div class="chead"><span class="num">05 · In the feed</span><div class="prose"><h1>What it looks like on a Tuesday</h1><p>Concept posts built from the system above. Try the first one: the Nash element is hidden in the window.</p></div></div>
+    <div class="feed">
+      <div style="grid-column:span 4">
+        <article class="post" aria-label="Concept LinkedIn post: Find the Nash">
+          <div class="ph"><span class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="#E5EDF6" stroke-width="1.5"/></svg></span><span class="who"><b>Nash</b><span>Find the Nash · Week 1</span></span><span class="tag">Concept</span></div>
+          <p class="txt">A 15th century counting house. A merchant weighs every parcel by hand, and the quay outside never stops moving.
+
+Somewhere in this painting, Nash is already at work. Can you find it?</p>
+          <div class="find" id="find" role="button" tabindex="0" aria-label="Click on the painting to find the Nash element">
+            <img src="img/counting-house.jpg" alt="Early Netherlandish style painting of a merchant weighing goods, with a quay visible through the window" width="800" height="800">
+            <span class="ring" id="ring"></span>
+            <span class="findmsg" id="findmsg">Tap where you think it is</span>
+          </div>
+          <div class="bar"><span>Like</span><span>Comment</span><span>Repost</span><span>Send</span></div>
+        </article>
+        <p class="feedcap">Find the Nash · Feed image 1:1 · Interactive version of a weekly game. The answer is a courier on the quay.</p>
+      </div>
+
+      <div style="grid-column:span 5">
+        <article class="post" aria-label="Concept LinkedIn carousel: Logistics has always existed">
+          <div class="ph"><span class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="#E5EDF6" stroke-width="1.5"/></svg></span><span class="who"><b>Nash</b><span>Living Archive · Carousel</span></span><span class="tag">Concept</span></div>
+          <p class="txt">Every market has the same promise to keep: the right thing, in the right place, before it spoils. 360 years ago it was carts and canals. Swipe for what changed.</p>
+          <div class="carousel" tabindex="0" aria-label="Carousel slides, scroll sideways">
+            <div class="slide shade"><img src="img/grocery.jpg" alt="Dutch Golden Age market with a chartreuse drone" style="object-position:48% 50%"><span class="s-n">01 / 05</span><p class="s-txt serif">Logistics has always existed.</p><span class="s-stamp">NASH</span></div>
+            <div class="slide"><span class="s-n">02 / 05</span><p class="s-txt">Fish at dawn. Bread by noon. Every stall on the canal depended on timing nobody could see.</p></div>
+            <div class="slide"><span class="s-n">03 / 05</span><p class="s-txt">The problem never changed: the right thing, the right place, the right time.</p></div>
+            <div class="slide"><span class="s-n">04 / 05</span><p class="s-txt">What changed is the system behind it. Set the objective. Agents work until you hit it.</p></div>
+            <div class="slide"><span class="s-n">05 / 05</span><p class="s-txt serif">Equilibrium in motion.</p><span class="s-stamp">NASH</span></div>
+          </div>
+          <div class="bar"><span>Like</span><span>Comment</span><span>Repost</span><span>Send</span></div>
+        </article>
+        <p class="feedcap">Living Archive · Carousel 4:5 · Slide 1 shows the world, the last slide the Nash difference. No chartreuse on text.</p>
+      </div>
+
+      <div style="grid-column:span 3">
+        <div class="phone">
+          <div class="story">
+            <img src="img/harbour-story.jpg" alt="Romantic era harbour painting in a storm, with one chartreuse cargo drone lifting a crate" width="452" height="800">
+            <div class="bars" aria-hidden="true"><i></i><i></i><i></i></div>
+            <p class="ov">Storms never stopped the harbour. They just made every decision harder.</p>
+            <span class="stamp">NASH</span>
+          </div>
+        </div>
+        <p class="feedcap">Living Archive · Story 9:16 · Text sits above the bottom safe zone; logo as vibe stamp, read last.</p>
+      </div>
+
+      <div style="grid-column:span 6">
+        <article class="x" aria-label="Concept X post">
+          <div class="row" style="gap:10px"><span class="avatar" aria-hidden="true" style="width:36px;height:36px"><svg viewBox="0 0 24 24"><polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="#E5EDF6" stroke-width="1.5"/></svg></span><b>Nash</b><span class="tag" style="border-color:#536471;color:#8b98a5">Concept</span></div>
+          <p class="xt">Dinner rush. Forty plates on the pass, six couriers, one street closed. Nash picked the route before the sauce went cold.</p>
+          <img src="img/restaurant.jpg" alt="Impressionist bistro kitchen with one chartreuse route line from the pass to the street" width="1024" height="579">
+        </article>
+        <p class="feedcap" style="color:var(--b300)">The Jolt meets the Living Archive · X card 16:9 · One idea, one route.</p>
+      </div>
+
+      <div style="grid-column:span 6">
+        <article class="post" aria-label="Concept LinkedIn post: Operators pillar">
+          <div class="ph"><span class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="#E5EDF6" stroke-width="1.5"/></svg></span><span class="who"><b>Nash</b><span>Operators</span></span><span class="tag">Concept</span></div>
+          <p class="txt">The hardest delivery isn't the far one. It's the one that has to leave in the next ten minutes, sealed, cold and signed for.
+
+Healthcare logistics runs on promises with no room for error. This week: how pharmacies plan the last mile when the medicine can't wait.</p>
+          <img src="img/health.jpg" alt="Renaissance fresco apothecary with one chartreuse sealed delivery case" width="1024" height="579" style="aspect-ratio:16/9;object-fit:cover">
+          <div class="bar"><span>Like</span><span>Comment</span><span>Repost</span><span>Send</span></div>
+        </article>
+        <p class="feedcap">Operators · Feed image · In the live series this opening line comes from a real operator interview, credited.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 THE SYSTEM -->
+<section class="chapter" id="system">
+  <div class="wrap">
+    <div class="chead"><span class="num">06 · The prompt system</span><div class="prose"><h1>One template, every industry, every format</h1><p class="muted">Template version 2. Version 1 made the first four paintings; the review of the woodblock print added the line that forbids text. Pick a combination and copy the prompt.</p></div></div>
+    <div class="gen">
+      <div class="controls">
+        <label for="industry"><span class="cap muted">Industry</span><select id="industry"></select></label>
+        <label for="period"><span class="cap muted">Art period</span><select id="period"></select></label>
+        <label for="element"><span class="cap muted">Nash element</span><select id="element"></select></label>
+        <label for="format"><span class="cap muted">Social format</span><select id="format"></select></label>
+      </div>
+      <div class="out">
+        <div class="row" style="justify-content:space-between"><span class="cap muted">Image prompt · Magnific, Midjourney or Firefly</span><span class="status" id="status" aria-live="polite"></span></div>
+        <pre class="prompt" id="prompt"></pre>
+        <div class="row"><button type="button" id="copy">Copy prompt</button><span class="status">The marked slot is the only thing allowed to turn chartreuse.</span></div>
+        <div><span class="cap muted">Caption draft · Nash voice</span><p class="capline" id="caption"></p></div>
+        <div><span class="cap muted">Sign off before it ships</span>
+          <ul class="checks">
+            <li>One chartreuse element only, and it is doing a job: moving, routing, delivering</li>
+            <li>No text, symbols, logos or signatures in the frame</li>
+            <li>Period technique holds: no modern lighting, lenses or plastic sheen</li>
+            <li>No recognisable real person and no copy of a specific existing artwork</li>
+            <li>Chartreuse matched to #C9FF00 in retouch; caption checked against the voice rules</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin:64px 0 16px">Every output, reviewed</h2>
+    <div class="gallery">
+      <figure><img src="img/grocery.jpg" alt="Dutch Golden Age market with a chartreuse drone" width="1024" height="579"><figcaption><div class="ct"><b>Grocery · Dutch Golden Age</b><span class="chip">Ready</span></div><span class="muted">The drone is the only chartreuse element and it is doing its job.</span></figcaption></figure>
+      <figure><img src="img/restaurant.jpg" alt="Impressionist kitchen with a chartreuse route line" width="1024" height="579"><figcaption><div class="ct"><b>Restaurants · Impressionism</b><span class="chip">Ready</span></div><span class="muted">The route reads as Nash acting. Herbs are natural green, not chartreuse.</span></figcaption></figure>
+      <figure><img src="img/health.jpg" alt="Renaissance fresco apothecary with a chartreuse case" width="1024" height="579"><figcaption><div class="ct"><b>Healthcare · Fresco</b><span class="chip fix">Fix first</span></div><span class="muted">The model added a white cross. Medical symbols carry meaning; removed in retouch.</span></figcaption></figure>
+      <figure><img src="img/firstmile.jpg" alt="Ukiyo-e style road with a chartreuse delivery robot" width="1024" height="579"><figcaption><div class="ct"><b>First mile · Ukiyo-e</b><span class="chip fix">Fix first</span></div><span class="muted">Invented title panels naming a real print series. Text is never left to AI.</span></figcaption></figure>
+      <figure class="sq"><img src="img/counting-house.jpg" alt="Early Netherlandish counting house with a chartreuse courier outside" width="800" height="800"><figcaption><div class="ct"><b>Retail · Early Netherlandish</b><span class="chip">Ready</span></div><span class="muted">The deep green curtain is a period green, far from chartreuse. Courier small by design for the game.</span></figcaption></figure>
+      <figure class="tall"><img src="img/harbour-story.jpg" alt="Romantic harbour with a chartreuse cargo drone" width="452" height="800" style="max-height:420px;object-fit:cover;aspect-ratio:auto;width:100%"><figcaption><div class="ct"><b>Freight · Romantic maritime</b><span class="chip">Ready</span></div><span class="muted">Generated on template version 2. No text, one element, period light.</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 07 PIPELINE -->
+<section class="chapter mid" id="pipeline">
+  <div class="wrap">
+    <div class="chead"><span class="num">07 · How it runs</span><div class="prose"><h1>AI makes options. People make decisions.</h1><p>The answer to "how do we scale without slop". Five steps, with the human decision named at every one.</p></div></div>
+    <div class="steps">
+      <div class="step"><span class="cap muted">1 · Brief</span><p class="who"><b>AI</b>Claude turns a campaign or vertical into five candidate scenes.</p><p class="who"><b>Person</b>Brand lead picks the scene and the period.</p></div>
+      <div class="step"><span class="cap muted">2 · Generate</span><p class="who"><b>AI</b>Four variants from the versioned prompt, per format.</p><p class="who"><b>Person</b>Designer picks one, or rewrites the prompt.</p></div>
+      <div class="step"><span class="cap muted">3 · Check</span><p class="who"><b>AI</b>A Claude skill flags breaks: extra chartreuse, text, off voice captions.</p><p class="who"><b>Person</b>Designer runs the five point sign off.</p></div>
+      <div class="step"><span class="cap muted">4 · Finish</span><p class="who"><b>AI</b>Upscale, extend and animate to every format.</p><p class="who"><b>Person</b>Retouch, color match, Jolt and aberration by hand.</p></div>
+      <div class="step"><span class="cap muted">5 · Learn</span><p class="who"><b>AI</b>Saves each approved asset with its prompt and review note.</p><p class="who"><b>Person</b>Turns every "fix first" into a new rule.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 FIRST 90 DAYS -->
+<section class="chapter" id="plan">
+  <div class="wrap">
+    <div class="chead"><span class="num">08 · First 90 days</span><h1>How I would start</h1></div>
+    <div class="plan">
+      <div class="card"><span class="cap muted">Days 1 to 30 · Listen and tighten</span>
+        <ul>
+          <li>Audit every live surface against the toolkit.</li>
+          <li>Ship the social chapter, version 1: pillars, formats, templates.</li>
+          <li>Build the prompt library and the brand checker skill.</li>
+          <li>Train the team on the workflow, with clear rules for what AI does.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="cap muted">Days 31 to 60 · Launch and move</span>
+        <ul>
+          <li>Launch the Living Archive weekly and Find the Nash.</li>
+          <li>Build the motion kit: Jolt, aberration and living paintings, in After Effects and web formats.</li>
+          <li>Design the "Your city, painted" booth moment for the next show.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="cap muted">Days 61 to 90 · Measure and extend</span>
+        <ul>
+          <li>Read the signals, keep what works, retire what doesn't.</li>
+          <li>Extend the system to decks, one pagers and the site.</li>
+          <li>Prompt library version 3, and a monthly review ritual with the team.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 ABOUT -->
+<section class="chapter dark" id="about">
+  <div class="wrap about">
+    <div class="prose">
+      <span class="num">09 · Who made this</span>
+      <h1>Mirian Gil</h1>
+      <p>Creative Director based in Hamburg. At my current agency I joined as the first creative and now lead a team of 12, accountable for all video and static production for more than 30 brands.</p>
+      <p>I build AI workflows that teams actually use: the prompts and tools, the training, and the governance that keeps everything on brand. One of those workflows took a lean team to three times its previous output without losing craft.</p>
+    </div>
+    <div class="prose">
+      <span class="cap" style="color:var(--b200)">How this case was made</span>
+      <p class="muted">Research and writing in Claude. Six paintings and one living painting generated in Magnific. Site hand built in HTML and CSS on the published Nash tokens, then published from GitHub. Images are shown without retouching, so the review step stays visible.</p>
+      <p><a href="https://migidesigner.com">migidesigner.com</a> (password: migi_password)</p>
+      <p>hello@migidesigner.com</p>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap foot">
+  <span>A speculative case study made for a job application. Not produced, commissioned or endorsed by Nash. No Nash logos are used; the hexagon in the mockups is a placeholder. Brand rules and tokens come from the public toolkit at nash.ai/brand and the post "Equilibrium in Motion: Introducing the New Nash Brand".</span>
+  <span>Images and motion generated with Magnific on 18 November 2026. © Mirian Gil, Cocolab.</span>
+</footer>
+
+<script>
+(function(){
+  /* Hero video: if the file is missing, keep the poster and do nothing else */
+  var v=document.getElementById("hero-video");
+  if(v){ v.addEventListener("error",function(){},true); }
+
+  /* Find the Nash */
+  var box=document.getElementById("find"), ring=document.getElementById("ring"), msg=document.getElementById("findmsg");
+  var target={x:0.81,y:0.36}, tries=0;
+  function check(px,py){
+    var dx=px-target.x, dy=py-target.y; tries++;
+    if(Math.sqrt(dx*dx+dy*dy)<0.09){
+      ring.style.left=(target.x*100)+"%"; ring.style.top=(target.y*100)+"%";
+      ring.classList.remove("on"); void ring.offsetWidth; ring.classList.add("on");
+      msg.textContent="Found it in "+tries+(tries===1?" try":" tries")+". The courier on the quay.";
+    } else {
+      msg.textContent = tries>2 ? "Hint: look through the window" : "Not there. Keep looking";
+    }
+  }
+  box.addEventListener("click",function(e){ var r=box.getBoundingClientRect(); check((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height); });
+  box.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); check(target.x,target.y); }});
+
+  /* Prompt generator */
+  var industries={
+    grocery:{label:"Grocery",scene:"a busy food market where people buy fresh produce, fish and bread",element:"drone",cap:"Fresh food has always raced the clock.\nNash keeps every order on time when the plan changes."},
+    restaurant:{label:"Restaurants",scene:"a busy kitchen during dinner service, plates waiting on the pass",element:"route",cap:"Dinner rush. One street closed.\nNash picked the route before the food went cold."},
+    health:{label:"Healthcare",scene:"an apothecary preparing medicine while people wait at the counter",element:"case",cap:"Some deliveries can't wait.\nNash plans the last mile for medicine that has to arrive sealed and on time."},
+    firstmile:{label:"First mile autonomy",scene:"porters carrying goods along a busy road",element:"robot",cap:"Couriers, drones, robots.\nNash coordinates whoever is best placed to carry it."},
+    retail:{label:"Retail",scene:"a crowded street of shops with shoppers and shopkeepers",element:"bike",cap:"Every store, a few minutes from every door.\nNash turns shelves into the shortest path home."},
+    freight:{label:"Freight and carriers",scene:"a busy harbour where cargo is unloaded from ships",element:"cargo",cap:"Storms never stopped the harbour.\nThey just made every decision harder. Nash makes the next one."}
+  };
+  var periods={
+    dutch:{label:"Dutch Golden Age oil",name:"17th century Dutch Golden Age oil painting",setting:"in a canal town",tech:"original muted earth palette, visible brushwork, aged varnish"},
+    flemish:{label:"Early Netherlandish oil",name:"Early Netherlandish 15th century oil panel painting",setting:"in a merchant city",tech:"jewel like colours, meticulous detail, fine glazes"},
+    fresco:{label:"Italian Renaissance fresco",name:"Italian Renaissance fresco",setting:"in a hillside town",tech:"soft faded fresco pigments, cracked plaster texture"},
+    romantic:{label:"Romantic maritime oil",name:"19th century Romantic oil painting",setting:"at dusk",tech:"turbulent sky in hazy gold and grey, loose atmospheric brushwork"},
+    impress:{label:"French Impressionism",name:"19th century French Impressionist oil painting",setting:"in Paris",tech:"loose broken brushstrokes, warm gaslight, original period palette"},
+    ukiyoe:{label:"Edo period ukiyo-e",name:"Japanese Edo period ukiyo-e woodblock print",setting:"on a coastal road beneath a distant mountain",tech:"flat areas of indigo and ochre, fine black key lines, paper grain"}
+  };
+  var elements={
+    drone:{label:"Delivery drone",text:"a small delivery drone carrying a paper bag, hovering calmly above the scene"},
+    route:{label:"Route line",text:"a single thin glowing route line running from the work out through the door into the street"},
+    case:{label:"Sealed delivery case",text:"a small sealed delivery case resting on the counter, ready to leave"},
+    robot:{label:"Autonomous robot",text:"a small autonomous delivery robot rolling along among the people"},
+    bike:{label:"Courier on a scooter",text:"a single delivery courier on an electric scooter moving through the crowd"},
+    cargo:{label:"Cargo drone",text:"a single small cargo drone lifting one crate, steady in the wind"}
+  };
+  var formats={
+    square:{label:"Feed square · 1:1",ratio:"1:1",note:"Square composition."},
+    portrait:{label:"Feed portrait · 4:5",ratio:"4:5",note:"Vertical composition with room at the top."},
+    story:{label:"Story or short · 9:16",ratio:"9:16",note:"Vertical composition; keep the lower fifth calm for captions."},
+    x:{label:"X card · 16:9",ratio:"16:9",note:"Wide composition."},
+    event:{label:"Event screen · 21:9",ratio:"21:9",note:"Panoramic composition."}
+  };
+  function fill(id,obj){var s=document.getElementById(id);Object.keys(obj).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=obj[k].label;s.appendChild(o);});return s;}
+  var sI=fill("industry",industries), sP=fill("period",periods), sE=fill("element",elements), sF=fill("format",formats);
+  sI.value="grocery"; sP.value="dutch"; sE.value="drone"; sF.value="square";
+  function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  var plain="";
+  function build(){
+    var i=industries[sI.value], p=periods[sP.value], e=elements[sE.value], f=formats[sF.value];
+    var a=p.name+" of "+i.scene+" "+p.setting+", "+p.tech+". Exactly one modern element in flat, luminous chartreuse green: ";
+    var b=". That element is the only chartreuse thing in the image; everything else keeps the period palette. No text, lettering, symbols, logos or signatures. No recognisable real people. Calm, balanced composition, with the chartreuse element at the point of balance. "+f.note+" Aspect ratio "+f.ratio+".";
+    plain=a+e.text+b;
+    document.getElementById("prompt").innerHTML=esc(a)+'<span class="slot">'+esc(e.text)+"</span>"+esc(b);
+    document.getElementById("caption").textContent=i.cap;
+    document.getElementById("status").textContent="";
+  }
+  sI.addEventListener("change",function(){sE.value=industries[sI.value].element;build();});
+  [sP,sE,sF].forEach(function(s){s.addEventListener("change",build);});
+  document.getElementById("copy").addEventListener("click",function(){
+    var st=document.getElementById("status");
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById("prompt"));var s=window.getSelection();s.removeAllRanges();s.addRange(r);st.textContent="Selected, press Ctrl C or Cmd C";}
+    try{navigator.clipboard.writeText(plain).then(function(){st.textContent="Copied";},sel);}catch(err){sel();}
+  });
+  build();
+})();
+</script>
+</body>
+</html>
